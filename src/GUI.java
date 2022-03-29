@@ -39,7 +39,7 @@ public class GUI {
         JPanel calculationsPanel= new JPanel();
         GridLayout calculationsLayout = new GridLayout(2,1);
         calculationsPanel.setLayout(calculationsLayout);
-        result=new JLabel("Resultado=");
+        result=new JLabel("Resultado= ");
 
 
         JPanel numPanel= new JPanel();
