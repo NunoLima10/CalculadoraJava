@@ -1,4 +1,6 @@
 package com.company;
+
+import javax.script.ScriptException;
 import  javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,8 +15,8 @@ public class GUI {
     ArrayList<ButtonHandeler> buttonlist;
     String frame_title;
     JLabel result;
-    String [] calculations= {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ",", "="};
-    String [] Operations= {"+","-","/","*","%","**"};
+    String [] calculations= {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "_x", "="};
+    String [] Operations= {"+","-","/","*","%","^"};
 
     //construtor
     GUI(int w, int h,String title){
@@ -28,36 +30,52 @@ public class GUI {
         frame.setSize(width,height);
         frame.setTitle(frame_title);
 
+
         JPanel MainPanel= new JPanel();
-        GridLayout MainPanelLayout = new GridLayout(1,1);
+        GridLayout MainPanelLayout = new GridLayout(1,1,5,5);
         MainPanel.setLayout(MainPanelLayout);
+        MainPanel.setBackground(Color.DARK_GRAY);
 
         JPanel OperationsPanel= new JPanel();
-        GridLayout OperationsPanelLayout = new GridLayout(3,2,5,5);
-        OperationsPanel.setLayout(OperationsPanelLayout);
+        BorderLayout borderLayout = new BorderLayout();
+        OperationsPanel.setLayout(borderLayout);
+        OperationsPanel.setBackground(Color.DARK_GRAY);
+
+        JPanel OperationsCenterPanel= new JPanel();
+        GridLayout OperationsCenterPanelLayout = new GridLayout(3,2,5,5);
+        OperationsCenterPanel.setLayout(OperationsCenterPanelLayout);
+        OperationsCenterPanel.setBackground(Color.DARK_GRAY);
+
 
         JPanel calculationsPanel= new JPanel();
-        GridLayout calculationsLayout = new GridLayout(2,1);
+        GridLayout calculationsLayout = new GridLayout(1,1);
         calculationsPanel.setLayout(calculationsLayout);
-        result=new JLabel("Resultado= ");
+        calculationsPanel.setBackground(Color.DARK_GRAY);
+
+        result=new JLabel(" ");
+        result.setFont(new Font("Cominc Sans",Font.BOLD,25));
+        result.setForeground(Color.lightGray);
 
 
         JPanel numPanel= new JPanel();
+
         GridLayout numLayout = new GridLayout(4,4,5,5);
         numPanel.setLayout(numLayout);
+        numPanel.setBackground(Color.DARK_GRAY);
 
         buttonlist=createButtuon();
         for (ButtonHandeler button:buttonlist) {
             if (button.type=="num"){
                 numPanel.add(button.Button);
             }else if(button.type=="op"){
-                OperationsPanel.add(button.Button);
+                OperationsCenterPanel.add(button.Button);
             }
 
         }
 
 
-        calculationsPanel.add(result);
+        OperationsPanel.add(result,BorderLayout.SOUTH);
+        OperationsPanel.add(OperationsCenterPanel, BorderLayout.CENTER);
         calculationsPanel.add(numPanel);
         MainPanel.add(calculationsPanel);
         MainPanel.add(OperationsPanel);
@@ -75,7 +93,23 @@ public class GUI {
                 Object eventSource=e.getSource();
                 for (ButtonHandeler button:buttonlist){
                     if (eventSource==button.Button){
-                        result.setText(result.getText()+button.label);
+
+                        String newText =result.getText();
+                        int textLength = newText.length();
+                        if (button.label == "_x" ){
+                             newText = textLength - 1 > 0 ? newText.substring(0, textLength - 1) : " ";
+                             result.setText(newText);
+                        }else if(button.label == "=" ){
+
+                        }else{
+                            newText += button.label;
+                            result.setText(newText);
+
+                        }
+
+
+
+
                     }
 
                 }
@@ -97,6 +131,15 @@ public class GUI {
             buttonlist.add(button);
         }
         return buttonlist;
+    }
+
+    static double getResult( String textResult){
+        char [] expression =textResult.toCharArray();
+
+
+
+
+        return  0;
     }
 
 }
