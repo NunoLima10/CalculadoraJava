@@ -1,12 +1,12 @@
 package com.company;
 
-import javax.script.ScriptException;
+
 import  javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Stack;
+
 
 
 public class GUI {
@@ -17,52 +17,54 @@ public class GUI {
     String frame_title;
     JLabel result;
     String[] calculations = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "_x", "="};
-    String[] Operations = {"+", "-", "/", "*", "%", "^", "(", ")"};
+    String[] Operations = {"+", "-", "/", "*", "%", "^", "(", ")",".","Ac"};
+    Expression expression  =new Expression();
 
     //construtor
-    GUI(int w, int h, String title) {
+    GUI(int width, int height, String title) {
         frame = new JFrame();
-        width = w;
-        height = h;
-        frame_title = title;
+        this.width = width;
+        this.height = height;
+        this.frame_title = title;
     }
 
     public void setGUI() {
         frame.setSize(width, height);
         frame.setTitle(frame_title);
 
-
+        //Main
         JPanel MainPanel = new JPanel();
         GridLayout MainPanelLayout = new GridLayout(1, 1, 5, 5);
         MainPanel.setLayout(MainPanelLayout);
         MainPanel.setBackground(Color.DARK_GRAY);
 
+        //Painel operadores
         JPanel OperationsPanel = new JPanel();
         BorderLayout borderLayout = new BorderLayout();
         OperationsPanel.setLayout(borderLayout);
         OperationsPanel.setBackground(Color.DARK_GRAY);
 
         JPanel OperationsCenterPanel = new JPanel();
-        GridLayout OperationsCenterPanelLayout = new GridLayout(4, 2, 5, 5);
+        GridLayout OperationsCenterPanelLayout = new GridLayout(5, 2, 5, 5);
         OperationsCenterPanel.setLayout(OperationsCenterPanelLayout);
         OperationsCenterPanel.setBackground(Color.DARK_GRAY);
 
-
+        //Painel Numeros
         JPanel calculationsPanel = new JPanel();
         GridLayout calculationsLayout = new GridLayout(1, 1);
         calculationsPanel.setLayout(calculationsLayout);
         calculationsPanel.setBackground(Color.DARK_GRAY);
 
+        JPanel numPanel = new JPanel();
+        GridLayout numLayout = new GridLayout(4, 4, 5, 5);
+        numPanel.setLayout(numLayout);
+        numPanel.setBackground(Color.DARK_GRAY);
+
+        //Resultado
         result = new JLabel(" ");
         result.setFont(new Font("Cominc Sans", Font.BOLD, 25));
         result.setForeground(Color.lightGray);
 
-
-        JPanel numPanel = new JPanel();
-
-        GridLayout numLayout = new GridLayout(4, 4, 5, 5);
-        numPanel.setLayout(numLayout);
-        numPanel.setBackground(Color.DARK_GRAY);
 
         buttonlist = createButtuon();
         for (ButtonHandeler button : buttonlist) {
@@ -96,13 +98,16 @@ public class GUI {
 
                     String newText = result.getText();
                     int textLength = newText.length();
+
                     if (button.label.equals("_x")) {
                         newText = textLength - 1 > 0 ? newText.substring(0, textLength - 1) : " ";
                         result.setText(newText);
                     } else if (button.label.equals("=")) {
-                        getResult(newText);
-
-                    } else {
+                        result.setText(Expression.evaluate(newText));
+                    } else if (button.label.equals("Ac")){
+                        result.setText(" ");
+                    }
+                    else {
                         newText += button.label;
                         result.setText(newText);
 
@@ -121,6 +126,7 @@ public class GUI {
 
     public ArrayList<ButtonHandeler> createButtuon() {
         ArrayList<ButtonHandeler> buttonlist = new ArrayList<ButtonHandeler>();
+
         for (int i = 0; i < calculations.length; i++) {
             ButtonHandeler button = new ButtonHandeler("num", calculations[i]);
             buttonlist.add(button);
@@ -132,28 +138,7 @@ public class GUI {
         return buttonlist;
     }
 
-    static double getResult(String textResult) {
 
-        textResult = textResult.strip();
-        char[] expression = textResult.toCharArray();
-
-        Stack<Integer> numbers = new Stack<Integer>();
-        Stack<Character> operations = new Stack<Character>();
-
-        StringBuilder numbertext = new StringBuilder();
-
-        for (char letter : expression) {
-            if (Character.isDigit(letter)) {
-                numbertext.append(letter);
-            } else{
-                numbers.add(Integer.valueOf(numbertext.toString()));
-                numbertext = new StringBuilder();
-                operations.add(letter);
-            }
-        }
-        numbers.add(Integer.valueOf(numbertext.toString()));
-        return 0;
-    }
 
 }
 
