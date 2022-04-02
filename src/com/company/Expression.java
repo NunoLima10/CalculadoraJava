@@ -17,8 +17,10 @@ public class Expression extends Throwable {
 
         double result;
 
-
         for (char c : expression) {
+
+            if (Character.isAlphabetic(c)){throw new UnsupportedOperationException(": / Erro de Sintaxe");}
+
             if (Character.isDigit(c) && !(c == '_') || c == '.') {
                 numbertext.append(c);
             } else {
@@ -34,6 +36,9 @@ public class Expression extends Throwable {
                     while (operations.peek() != '(') {
                         result = getResult(numbers.pop(), numbers.pop(), operations.pop());
                         numbers.push(result);
+                        if (operations.isEmpty()){
+                            throw new UnsupportedOperationException(": / Erro de Sintaxe");
+                        }
                     }
                     operations.pop();
                 } else if (!operations.isEmpty() && !(c == '_')) {
@@ -66,7 +71,7 @@ public class Expression extends Throwable {
             case '-':
                 return number2 - number1;
             case '/':
-                if (number1 == 0) throw new UnsupportedOperationException("Divisão por 0");
+                if (number1 == 0) throw new UnsupportedOperationException(": / Divisão por 0 ");
                 return number2 / number1;
             case '*':
                 return number2 * number1;
@@ -96,39 +101,6 @@ public class Expression extends Throwable {
         }
         return true;
     }
-
-   /* public static double evalute2(String expressionText) {
-
-        Stack<Double> numbers = new Stack<>();
-        Stack<Character> operations = new Stack<>();
-        int size = expressionText.length() - 1;
-
-        for (int i = 0; i < size ; i++) {
-            if (expressionText.charAt(i) >= '0' && expressionText.charAt(i) <= '9') {
-                String add = "";
-                while (i < size && expressionText.charAt(i) >= '0' && expressionText.charAt(i) <= '9')
-                    add = add + expressionText.charAt(i++);
-                numbers.push(Double.parseDouble(add));
-                i--;
-            } else if (expressionText.charAt(i) == '(') {
-                operations.push(expressionText.charAt(i));
-            } else if (expressionText.charAt(i) == ')') {
-                while (operations.peek() != '(')
-                    numbers.push(getResult(numbers.pop(), numbers.pop(), operations.pop()));
-                operations.pop();
-            } else if (expressionText.charAt(i) == '+' || expressionText.charAt(i) == '-' || expressionText.charAt(i) == '*' || expressionText.charAt(i) == '/' || expressionText.charAt(i) == '^') {
-                while (!operations.empty() && priorityOperation(expressionText.charAt(i), operations.peek()))
-                    numbers.push(getResult(numbers.pop(), numbers.pop(), operations.pop()));
-                operations.push(expressionText.charAt(i));
-            }
-        }
-        System.out.println(numbers);
-        System.out.println(operations);
-
-        return 0;
-    }*/
-
-
 
 
 

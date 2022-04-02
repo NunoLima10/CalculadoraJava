@@ -103,7 +103,11 @@ public class GUI {
                         newText = textLength - 1 > 0 ? newText.substring(0, textLength - 1) : " ";
                         result.setText(newText);
                     } else if (button.label.equals("=")) {
-                        result.setText(Expression.evaluate(newText));
+                        try {
+                            if (!newText.equals(" ")){ result.setText(Expression.evaluate(newText));}
+                        }catch (Exception ex){
+                            result.setText(ex.getMessage());
+                        }
                     } else if (button.label.equals("Ac")){
                         result.setText(" ");
                     }
